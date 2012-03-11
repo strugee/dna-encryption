@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2857B73E-F847-4B02-9238-064979017E93}") = "dna-encryption", "dna-encryption\dna-encryption.cproj", "{BA8BC9FF-24B5-4F2B-BB8C-9C5F9E9512FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA8BC9FF-24B5-4F2B-BB8C-9C5F9E9512FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA8BC9FF-24B5-4F2B-BB8C-9C5F9E9512FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA8BC9FF-24B5-4F2B-BB8C-9C5F9E9512FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA8BC9FF-24B5-4F2B-BB8C-9C5F9E9512FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = dna-encryption\dna-encryption.cproj
+	EndGlobalSection
+EndGlobal
