@@ -9,7 +9,7 @@
     <Target>Bin</Target>
     <Language>CPP</Language>
     <Compiler>
-      <Compiler ctype="GppCompiler" xmlns="" />
+      <Compiler ctype="GppCompiler" />
     </Compiler>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -28,4 +28,7 @@
     <OutputName>dna-encryption</OutputName>
     <CompileTarget>Bin</CompileTarget>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="main.cpp" />
+  </ItemGroup>
 </Project>
