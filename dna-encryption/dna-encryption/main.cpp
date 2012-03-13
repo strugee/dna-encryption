@@ -4,8 +4,21 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include <ctime>
 using namespace std;
+
+getNextSequence(string previousSequence) {
+	string nextSequence;
+	bool stillChanging = true;
+	
+	//TODO
+	for (int i =  0; stillChanging = true; i++) {
+		char previousSequenceChar = previousSequence[0];
+	}
+	
+	return nextSequence;
+}
 
 int main() {
 	
@@ -161,4 +174,7 @@ int main() {
 	cout << "\n" << "done generating sequences";
 	
 	cout << "\n" << "encrypting plaintext using";
+	//TODO
+	
+	
 }
