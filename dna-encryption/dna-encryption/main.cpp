@@ -9,12 +9,25 @@
 using namespace std;
 
 getNextSequence(string previousSequence) {
-	string nextSequence;
+	string nextSequence = previousSequence;
 	bool stillChanging = true;
 	
 	//TODO
-	for (int i =  0; stillChanging = true; i++) {
-		char previousSequenceChar = previousSequence[0];
+	for (int i = previousSequence.size(); stillChanging = true; ) {
+		char previousSequenceChar = previousSequence[i];
+		if (previousSequenceChar == 'A') {
+			nextSequence[i] = "T";
+			stillChanging = false;
+		} else if (previousSequenceChar == 'T') {
+			nextSequence[i] = "C";
+			stillChanging = false;
+		} else if (previousSequenceChar == 'C') {
+			nextSequence[i] = "G";
+			stillChanging = false;
+		} else if (previousSequenceChar == 'G') {
+			i--;
+			nextSequence[i] = "A";
+		}
 	}
 	
 	return nextSequence;
