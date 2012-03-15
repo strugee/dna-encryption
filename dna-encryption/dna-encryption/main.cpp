@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <string>
 #include <ctime>
+#include <fstream>
 using namespace std;
 
 getNextSequence(string previousSequence) {
@@ -36,12 +37,14 @@ getNextSequence(string previousSequence) {
 int main() {
 	
 	bool verbose = false;
+	bool willDumpData = true;
 	int iterations;
 	int randnumberdigits;
 	int dnanumbervalues;
 	string plaintext;
 	string dnaciphertext;
 	string numciphertext;
+	string dumpLocation = "~/sciencefair.txt";
 	
 	cout << "show verbose output? (y/n): ";
 	string charverbose;
@@ -50,6 +53,22 @@ int main() {
 		verbose = true;
 	} else if (charverbose == "n") {
 		verbose = false;
+	}
+	
+	cout << "\n" << "dump data to file when done? (y/n) ";
+	string chardumpData;
+	cin >> chardumpData;
+	if (chardumpData == "y") {
+		dumpData = true;
+		cout << "\n" << "specify file path to dump to: ";
+		cin >> dumpLocation;
+		ofstream dumpfile;
+		dumpfile.open(dumpLocation);
+		if (dumpfile.is_open() == false) {
+			cout << "\n" << "opening the file failed. program will not dump.";
+		}
+	} else if (chardumpData == "n") {
+		dumpData = false;
 	}
 	
 	cout << "select number of test iterations: ";
@@ -189,5 +208,7 @@ int main() {
 	cout << "\n" << "encrypting plaintext using";
 	//TODO
 	
-	
+	//clean up and exit
+	dumpfile.close();
+	return 0;
 }
