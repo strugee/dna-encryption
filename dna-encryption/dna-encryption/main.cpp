@@ -9,12 +9,13 @@
 #include <fstream>
 using namespace std;
 
-getNextSequence(string previousSequence) {
+getNextSequence(string previousSequence fstream dumpfile) {
+	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
 	
 	//TODO
-	for (int i = previousSequence.size(); stillChanging = true; ) {
+	for (int i = previousSequence.size(); stillChanging = true;) {
 		char previousSequenceChar = previousSequence[i];
 		if (previousSequenceChar == 'A') {
 			nextSequence[i] = "T";
@@ -31,6 +32,7 @@ getNextSequence(string previousSequence) {
 		}
 	}
 	
+	dumpfile << "\n" << "new sequence is" << nextSequence;
 	return nextSequence;
 }
 
@@ -58,7 +60,7 @@ int main() {
 	cout << "\n" << "dump data to file when done? (y/n) ";
 	string chardumpData;
 	cin >> chardumpData;
-	if (chardumpData == "y") {
+	if (chardumpData == "y") { 
 		dumpData = true;
 		cout << "\n" << "specify file path to dump to: ";
 		cin >> dumpLocation;
@@ -66,8 +68,11 @@ int main() {
 		dumpfile.open(dumpLocation);
 		if (dumpfile.is_open() == false) {
 			cout << "\n" << "opening the file failed. program will not dump.";
+		} else {
+			dumpfile << "initiated dumpfile
+			";
 		}
-	} else if (chardumpData == "n") {
+else if (chardumpData == "n") {
 		dumpData = false;
 	}
 	
@@ -80,12 +85,15 @@ int main() {
 	
 	cout << "\n" << "ok. select number of digits for the random numbers: ";
 	cin >> randnumberdigits;
+	if (dumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
 	
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
 	cin >> dnanumbervalues;
+	if (dumpData) dumpfile << "selected " << dnanumbervalues << " as the number of values in the DNA sequence";
 	
 	cout << "\n" << "specify plaintext to encrypt: ";
 	cin >> plaintext;
+	if (dumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
 	
 	cout << "\n" << "ok. generating random numbers";
 	for (int i = 0; i != iterations; i++) {
@@ -147,6 +155,7 @@ int main() {
 			}
 		} while (numbervalid == false);
 		randnumber[i] = trynumber;
+		
 	}
 	cout << "\n" << "done generating random numbers";
 	if (verbose) {
