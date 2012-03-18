@@ -9,7 +9,7 @@
 #include <fstream>
 using namespace std;
 
-getNextSequence(string previousSequence fstream dumpfile) {
+string getNextSequence(string previousSequence, fstream dumpfile) {
 	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
@@ -47,6 +47,7 @@ int main() {
 	string dnaciphertext;
 	string numciphertext;
 	string dumpLocation = "~/sciencefair.txt";
+	ofstream dumpfile;
 	
 	cout << "show verbose output? (y/n): ";
 	string charverbose;
@@ -61,19 +62,18 @@ int main() {
 	string chardumpData;
 	cin >> chardumpData;
 	if (chardumpData == "y") { 
-		dumpData = true;
+		willDumpData = true;
 		cout << "\n" << "specify file path to dump to: ";
 		cin >> dumpLocation;
-		ofstream dumpfile;
 		dumpfile.open(dumpLocation);
 		if (dumpfile.is_open() == false) {
 			cout << "\n" << "opening the file failed. program will not dump.";
+			willDumpData = false;
 		} else {
-			dumpfile << "initiated dumpfile
-			";
+			dumpfile << "initiated dumpfile";
 		}
-else if (chardumpData == "n") {
-		dumpData = false;
+	} else if (chardumpData == "n") {
+		willDumpData = false;
 	}
 	
 	cout << "select number of test iterations: ";
@@ -85,15 +85,15 @@ else if (chardumpData == "n") {
 	
 	cout << "\n" << "ok. select number of digits for the random numbers: ";
 	cin >> randnumberdigits;
-	if (dumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
+	if (willDumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
 	
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
 	cin >> dnanumbervalues;
-	if (dumpData) dumpfile << "selected " << dnanumbervalues << " as the number of values in the DNA sequence";
+	if (willDumpData) dumpfile << "selected " << dnanumbervalues << " as the number of values in the DNA sequence";
 	
 	cout << "\n" << "specify plaintext to encrypt: ";
 	cin >> plaintext;
-	if (dumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
+	if (willDumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
 	
 	cout << "\n" << "ok. generating random numbers";
 	for (int i = 0; i != iterations; i++) {
