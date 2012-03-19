@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <fstream>
+#include "libcryptopp.a"
 using namespace std;
 
 string getNextSequence(string previousSequence, fstream dumpfile) {
