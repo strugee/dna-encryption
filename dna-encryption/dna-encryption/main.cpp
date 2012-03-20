@@ -2,6 +2,8 @@
 // Written by Alex Jordan on Sunday, March 11th 2012
 // This program is for the 1012 Google Science Fair. It is not intended to be useful in any other context.
 
+// This project uses a static compilation of Crypto++. License can be found at http://cryptopp.com/License.txt
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -9,6 +11,17 @@
 #include <fstream>
 #include "libcryptopp.a"
 using namespace std;
+
+string changeStringValue(string originalString, int stringValueToReplace, char replacingCharacter) {
+	string newString;
+	
+	//TODO
+	for (int i = 0; i <= originalString.size(); i++) {
+		
+	}
+	
+	return newString;
+}
 
 string getNextSequence(string previousSequence, fstream dumpfile) {
 	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
