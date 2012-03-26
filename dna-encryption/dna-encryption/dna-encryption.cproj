@@ -19,6 +19,7 @@
     <SourceDirectory>.</SourceDirectory>
     <OutputName>dna-encryption</OutputName>
     <CompileTarget>Bin</CompileTarget>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release</OutputPath>
@@ -30,8 +31,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="libcryptopp.a" />
   </ItemGroup>
 </Project>

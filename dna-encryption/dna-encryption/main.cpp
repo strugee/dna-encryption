@@ -2,47 +2,50 @@
 // Written by Alex Jordan on Sunday, March 11th 2012
 // This program is for the 1012 Google Science Fair. It is not intended to be useful in any other context.
 
-// This project uses a static compilation of Crypto++. License can be found at http://cryptopp.com/License.txt
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <ctime>
 #include <fstream>
-#include "libcryptopp.a"
 using namespace std;
 
+/*
+// I unfortunately spent some time on this only to find out that I didn't need it;
+// I'm keeping it around so I don't feel like I wasted that time
 string changeStringValue(string originalString, int stringValueToReplace, char replacingCharacter) {
 	string newString;
 	
-	//TODO
 	for (int i = 0; i <= originalString.size(); i++) {
-		
+		if (i != stringValueToReplace) {
+			newString += originalString[i];
+		} else if (i == stringValueToReplace) {
+			newString += replacingCharacter;
+		}
 	}
 	
 	return newString;
 }
+*/
 
 string getNextSequence(string previousSequence, fstream dumpfile) {
 	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
 	
-	//TODO
 	for (int i = previousSequence.size(); stillChanging = true;) {
 		char previousSequenceChar = previousSequence[i];
 		if (previousSequenceChar == 'A') {
-			nextSequence[i] = "T";
+			nextSequence[i] = 'T';
 			stillChanging = false;
 		} else if (previousSequenceChar == 'T') {
-			nextSequence[i] = "C";
+			nextSequence[i] = 'C';
 			stillChanging = false;
 		} else if (previousSequenceChar == 'C') {
-			nextSequence[i] = "G";
+			nextSequence[i] = 'G';
 			stillChanging = false;
 		} else if (previousSequenceChar == 'G') {
 			i--;
-			nextSequence[i] = "A";
+			nextSequence[i] = 'A';
 		}
 	}
 	
@@ -79,7 +82,8 @@ int main() {
 		willDumpData = true;
 		cout << "\n" << "specify file path to dump to: ";
 		cin >> dumpLocation;
-		dumpfile.open(dumpLocation);
+		//FIXME
+		//dumpfile.open(dumpLocation);
 		if (dumpfile.is_open() == false) {
 			cout << "\n" << "opening the file failed. program will not dump.";
 			willDumpData = false;
@@ -97,8 +101,13 @@ int main() {
 	int randnumber[iterations-1];
 	string randsequence[iterations-1];
 	
-	cout << "\n" << "ok. select number of digits for the random numbers: ";
+	cout << "\n" << "ok. select number of digits for the random numbers (no more than 9, please): ";
 	cin >> randnumberdigits;
+	if (randnumberdigits > 9) {
+		if (willDumpData) dumpfile << "\n" << "invalid random number digits. program terminated";
+		cout << "\n" << "invalid";
+		exit(1);
+	}
 	if (willDumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
 	
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
@@ -110,6 +119,7 @@ int main() {
 	if (willDumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
 	
 	cout << "\n" << "ok. generating random numbers";
+	/* // This clearly didn't work.
 	for (int i = 0; i != iterations; i++) {
 		int trynumber;
 		if (verbose) {
@@ -171,6 +181,73 @@ int main() {
 		randnumber[i] = trynumber;
 		
 	}
+	*/
+	for (int i = 0; i != iterations; i++) {
+		int trynumber;
+		if (verbose) {
+			cout << "\n" << "generating random number " << i+1;
+		}
+		bool numbervalid = false;
+		
+		//initialize random seed
+		srand ( time(NULL) );
+		//generate random number
+		trynumber = rand();
+
+		do {
+			if (verbose) {
+				cout << "\n" << "generated " << trynumber;
+			}
+			
+			//make sure the number is positive; if not, make it positive
+			if (trynumber < 0) {
+				//number is negative
+				if (verbose) {
+					cout << "\n" << "number is negative. multiplying by -1";
+				}
+				trynumber = trynumber*(-1);
+				if (verbose) {
+					cout << "\n" << "done. number is now " << trynumber;
+				}
+			} else {
+				//number is positive
+				if (verbose) {
+					cout << "\n" << "number is positive. continuing ";
+				}
+			}
+			
+			//get the number of digits in the number
+			if (verbose) {
+				cout << "\n" << "determining number of digits";
+			}
+			int digits = 1;
+			for (int j = trynumber; j > 10; digits++) {
+				j = j/10;
+			}
+			if (verbose) {
+				cout << "\n" << "number has " << digits << " digits";
+			}
+			
+			//determine if number of digits matches requested number of digits; if so, flip numbervalid to true; if not, clip digits
+			if (digits == randnumberdigits) {
+				numbervalid = true;
+			} else if (digits > randnumberdigits) {
+				trynumber -= trynumber % 10;
+			}
+			
+			if (verbose) {
+				if (numbervalid == true) {
+					cout << "\n" << "number of digits matches requested number of digits. generation of random number " << i+1 << "is complete";
+				}
+				if (numbervalid == false) {
+					cout << "\n" << "number of digits does not match requested number of digits. clipping numbers to get closer to a match";
+				}
+			}
+		} while (numbervalid == false);
+		randnumber[i] = trynumber;
+		
+	}
+	
 	cout << "\n" << "done generating random numbers";
 	if (verbose) {
 		for (int i = 0; i < iterations; i++)
