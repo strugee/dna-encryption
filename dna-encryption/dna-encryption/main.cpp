@@ -1,5 +1,5 @@
 // DNA encryption
-// Written by Alex Jordan on Sunday, March 11th 2012
+// Written by Alex Jordan from Sunday, March 11th 2012 to Monday, March 26th 2012
 // This program is for the 1012 Google Science Fair. It is not intended to be useful in any other context.
 
 #include <iostream>
@@ -61,8 +61,6 @@ int main() {
 	int randnumberdigits;
 	int dnanumbervalues;
 	string plaintext;
-	string dnaciphertext;
-	string numciphertext;
 	string dumpLocation = "~/sciencefair.txt";
 	ofstream dumpfile;
 	
@@ -97,9 +95,11 @@ int main() {
 	cout << "select number of test iterations: ";
 	cin >> iterations;
 	
-	//initialize arrays to store the random numbers/sequences that we generate: we can't do this at the top because we don't know how many numbers/sequences there will be
+	//initialize arrays to store the random numbers/sequences and ciphertexts that we generate: we can't do this at the top because we don't know how many numbers/sequences there will be
 	int randnumber[iterations-1];
 	string randsequence[iterations-1];
+	string numciphertext[iterations-1];
+	string dnaciphertext[iterations-1];
 	
 	cout << "\n" << "ok. select number of digits for the random numbers (no more than 9, please): ";
 	cin >> randnumberdigits;
