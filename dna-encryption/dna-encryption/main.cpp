@@ -2,11 +2,15 @@
 // Written by Alex Jordan from Sunday, March 11th 2012 to Monday, March 26th 2012
 // This program is for the 1012 Google Science Fair. It is not intended to be useful in any other context.
 
+// Notes:
+// If plugging in an int to encrypt() or decrypt(), you MUST convert it to a string in the arguments!
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <ctime>
 #include <fstream>
+#include <assert.h>
 using namespace std;
 
 /*
@@ -28,6 +32,7 @@ string changeStringValue(string originalString, int stringValueToReplace, char r
 */
 
 string getNextSequence(string previousSequence, fstream dumpfile) {
+	//code complete
 	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
@@ -51,6 +56,135 @@ string getNextSequence(string previousSequence, fstream dumpfile) {
 	
 	dumpfile << "\n" << "new sequence is" << nextSequence;
 	return nextSequence;
+}
+
+int convertDnaToInt(string sequence) {
+	//code complete
+	int intSequence;
+	
+	for (int i = 0; i < sequence.size(); i++) {
+		int DnaNumberEquivalent;
+		if (sequence[i] == 'A') {
+			DnaNumberEquivalent = 1;
+		} else if (sequence[i] == 'T') {
+			DnaNumberEquivalent = 2;
+		} else if (sequence[i] == 'C') {
+			DnaNumberEquivalent = 3;
+		} else if (sequence[i] == 'G') {
+			DnaNumberEquivalent = 4;
+		}
+		
+		intSequence = intSequence*10;
+		intSequence = intSequence+DnaNumberEquivalent;
+	}
+	
+	return intSequence;
+}
+
+int convertLetterToNumber(char letter) {
+	//code complete
+	// redundant; for better code understanding
+	int l = letter;
+	int n;
+	
+	if (l == 'A') {
+		n = 1;
+	} else if (l == 'B') {
+		n = 2;
+	} else if (l == 'C') {
+		n = 3;
+	} else if (l == 'D') {
+		n = 4;
+	} else if (l == 'E') {
+		n = 5;
+	} else if (l == 'F') {
+		n = 6;
+	} else if (l == 'G') {
+		n = 7;
+	} else if (l == 'H') {
+		n = 8;
+	} else if (l == 'I') {
+		n = 9;
+	} else if (l == 'J') {
+		n = 10;
+	} else if (l == 'K') {
+		n = 11;
+	} else if (l == 'L') {
+		n = 12;
+	} else if (l == 'M') {
+		n = 13;
+	} else if (l == 'N') {
+		n = 14;
+	} else if (l == 'O') {
+		n = 15;
+	} else if (l == 'P') {
+		n = 16;
+	} else if (l == 'Q') {
+		n = 17;
+	} else if (l == 'R') {
+		n = 18;
+	} else if (l == 'S') {
+		n = 19;
+	} else if (l == 'T') {
+		n = 20;
+	} else if (l == 'U') {
+		n = 21;
+	} else if (l == 'V') {
+		n = 22;
+	} else if (l == 'W') {
+		n = 23;
+	} else if (l == 'X') {
+		n = 24;
+	} else if (l == 'Y') {
+		n = 25;
+	} else if (l == 'Z') {
+		n = 26;
+	}
+	
+	// if we didn't get a value for number, something went wrong. crash.
+	assert(n != NULL);
+	
+	// again, redundant; it's for better code understanding
+	int number = n;
+	return number;
+}
+
+string encrypt(string plaintextString, string keyString) {
+	string ciphertext;
+	int plaintext[plaintextString.size()];
+	int key[keyString.size()];
+	
+	if (keyString[0] == 'A' || keyString[0] == 'T' || keyString[0] == 'C' || keyString[0] == 'G') {
+		// Key is DNA
+		key = convertDnaToInt(keyString);
+	} else {
+		// Key is number
+		for (int i = 0; i < keyString.size(); i++) {
+			// typecasts whoo
+			string keyIntTransitive = string(keyString[i]);
+			
+			key[i] = atoi(keyIntTransitive.c_str());
+		}
+	}
+	
+	for (int i = 0; i < plaintextString.size(); i++) {
+		//set plaintext value i
+		plaintext[i] = convertLetterToNumber(plaintextString[i]);;
+		//make sure key[i] exists, mostly because I like using assertions
+		assert(key[i] != NULL);
+		//perform algorithm
+		plaintext[i] = plaintext[i] + key[i];
+	}
+	
+	return ciphertext;
+}
+
+string decrypt(string ciphertext, string key) {
+	string plaintext;
+	
+	
+	
+	return plaintext;
 }
 
 int main() {
@@ -103,11 +237,7 @@ int main() {
 	
 	cout << "\n" << "ok. select number of digits for the random numbers (no more than 9, please): ";
 	cin >> randnumberdigits;
-	if (randnumberdigits > 9) {
-		if (willDumpData) dumpfile << "\n" << "invalid random number digits. program terminated";
-		cout << "\n" << "invalid";
-		exit(1);
-	}
+	assert(randnumberdigits < 10);
 	if (willDumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
 	
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
@@ -305,7 +435,7 @@ int main() {
 	}
 	cout << "\n" << "done generating sequences";
 	
-	cout << "\n" << "encrypting plaintext using";
+	cout << "\n" << "encrypting plaintext using ";
 	//TODO
 	
 	//clean up and exit
