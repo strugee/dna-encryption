@@ -3,7 +3,7 @@
 // This program is for the 1012 Google Science Fair. It is not intended to be useful in any other context.
 
 // Notes:
-// If plugging in an int to encrypt() or decrypt(), you MUST convert it to a string in the arguments!
+// If plugging in an int to encrypt(), decrypt(), or getNextRandomNumber(), you MUST convert it to a string in the arguments!
 
 #include <iostream>
 #include <cstdlib>
@@ -11,6 +11,7 @@
 #include <ctime>
 #include <fstream>
 #include <assert.h>
+#include <sstream>
 using namespace std;
 
 /*
@@ -31,13 +32,58 @@ string changeStringValue(string originalString, int stringValueToReplace, char r
 }
 */
 
-string getNextSequence(string previousSequence, fstream dumpfile) {
+string getNextRandNumber(string previousNumber, ofstream dumpfile) {
 	//code complete
-	dumpfile << "\n" << "calculating next sequence. previous sequence was" << previousSequence;
+	dumpfile << "\n" << "calculating next random number. previous random number was " << previousNumber;
+	string nextNumber = previousNumber;
+	bool stillChanging = true;
+	
+	for (int i = 0; stillChanging;) {
+		if (previousNumber[i] = '0') {
+			previousNumber[i] = '1';
+			stillChanging = false;
+		} else if (previousNumber[i] = '1') {
+			previousNumber[i] = '2';
+			stillChanging = false;
+		} else if (previousNumber[i] = '2') {
+			previousNumber[i] = '3';
+			stillChanging = false;
+		} else if (previousNumber[i] = '3') {
+			previousNumber[i] = '4';
+			stillChanging = false;
+		} else if (previousNumber[i] = '4') {
+			previousNumber[i] = '5';
+			stillChanging = false;
+		} else if (previousNumber[i] = '5') {
+			previousNumber[i] = '6';
+			stillChanging = false;
+		} else if (previousNumber[i] = '6') {
+			previousNumber[i] = '7';
+			stillChanging = false;
+		} else if (previousNumber[i] = '7') {
+			previousNumber[i] = '8';
+			stillChanging = false;
+		} else if (previousNumber[i] = '8') {
+			previousNumber[i] = '9';
+			stillChanging = false;
+		} else if (previousNumber[i] = '9') {
+			previousNumber[i] = '1';
+			i++;
+		}
+		
+		assert(previousNumber[i] != nextNumber[i]);
+	}
+	
+	return nextNumber;
+}
+
+string getNextSequence(string previousSequence, ofstream dumpfile) {
+	//code complete
+	dumpfile << "\n" << "calculating next sequence. previous sequence was " << previousSequence;
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
 	
-	for (int i = previousSequence.size(); stillChanging = true;) {
+	for (int i = previousSequence.size(); stillChanging;) {
 		char previousSequenceChar = previousSequence[i];
 		if (previousSequenceChar == 'A') {
 			nextSequence[i] = 'T';
@@ -56,6 +102,20 @@ string getNextSequence(string previousSequence, fstream dumpfile) {
 	
 	dumpfile << "\n" << "new sequence is" << nextSequence;
 	return nextSequence;
+}
+
+string convertIntToStr(int integer) {
+    ostringstream out;
+    out << integer;
+    return out.str();
+}
+
+string convertToUpperCase(string& strToConvert) {
+	for(unsigned int i=0;i<strToConvert.length();i++) {
+		strToConvert[i] = toupper(strToConvert[i]);
+	}
+	
+	return strToConvert;
 }
 
 int convertDnaToInt(string sequence) {
@@ -149,46 +209,207 @@ int convertLetterToNumber(char letter) {
 	return number;
 }
 
+char convertNumberToLetter(int number) {
+	//code complete
+	// redundant; for better code understanding
+	int n = number;
+	char l;
+	
+	if (n == 1) {
+		l = 'A';
+	} else if (n == 2) {
+		l = 'B';
+	} else if (n == 3) {
+		l = 'C';
+	} else if (n == 4) {
+		l = 'D';
+	} else if (n == 5) {
+		l = 'E';
+	} else if (n == 6) {
+		l = 'F';
+	} else if (n == 7) {
+		l = 'G';
+	} else if (n == 8) {
+		l = 'H';
+	} else if (n == 9) {
+		l = 'I';
+	} else if (n == 10) {
+		l = 'J';
+	} else if (n == 11) {
+		l = 'K';
+	} else if (n == 12) {
+		l = 'L';
+	} else if (n == 13) {
+		l = 'M';
+	} else if (n == 14) {
+		l = 'N';
+	} else if (n == 15) {
+		l = 'O';
+	} else if (n == 16) {
+		l = 'P';
+	} else if (n == 17) {
+		l = 'Q';
+	} else if (n == 18) {
+		l = 'R';
+	} else if (n == 19) {
+		l = 'S';
+	} else if (n == 20) {
+		l = 'T';
+	} else if (n == 21) {
+		l = 'U';
+	} else if (n == 22) {
+		l = 'V';
+	} else if (n == 23) {
+		l = 'W';
+	} else if (n == 24) {
+		l = 'X';
+	} else if (n == 25) {
+		l = 'Y';
+	} else if (n == 26) {
+		l = 'Z';
+	}
+	
+	// if we didn't get a value for letter, something went wrong. crash.
+	assert(l != NULL);
+
+	// again, redundant; it's for better code understanding
+	char letter = l;
+	return letter;
+}
+
+string convertCharToString(char character) {
+	//code complete
+	// redundant; for improved code understanding. get used to it.
+	char c = character;
+	string s;
+	
+	if (c == 'A') {
+		s = "A";
+	} else if (c == 'B') {
+		s = "B";
+	} else if (c == 'C') {
+		s = "C";
+	} else if (c == 'D') {
+		s = "D";
+	} else if (c == 'E') {
+		s = "E";
+	} else if (c == 'F') {
+		s = "F";
+	} else if (c == 'G') {
+		s = "G";
+	} else if (c == 'H') {
+		s = "H";
+	} else if (c == 'I') {
+		s = "I";
+	} else if (c == 'J') {
+		s = "J";
+	} else if (c == 'K') {
+		s = "K";
+	} else if (c == 'L') {
+		s = "L";
+	} else if (c == 'M') {
+		s = "M";
+	} else if (c == 'N') {
+		s = "N";
+	} else if (c == 'O') {
+		s = "O";
+	} else if (c == 'P') {
+		s = "P";
+	} else if (c == 'Q') {
+		s = "Q";
+	} else if (c == 'R') {
+		s = "R";
+	} else if (c == 'S') {
+		s = "S";
+	} else if (c == 'T') {
+		s = "T";
+	} else if (c == 'U') {
+		s = "U";
+	} else if (c == 'V') {
+		s = "V";
+	} else if (c == 'W') {
+		s = "W";
+	} else if (c == 'X') {
+		s = "X";
+	} else if (c == 'Y') {
+		s = "Y";
+	} else if (c == 'Z') {
+		s = "Z";
+	}
+	
+	//guess why this is here
+	//if you don't get it you either haven't read the beginning of this method and methods above it or you're stupid
+	string charString = s;
+	
+	return charString;
+}
+
 string encrypt(string plaintextString, string keyString) {
 	string ciphertext;
 	int plaintext[plaintextString.size()];
 	int key[keyString.size()];
-	
-	if (keyString[0] == 'A' || keyString[0] == 'T' || keyString[0] == 'C' || keyString[0] == 'G') {
-		// Key is DNA
-		key = convertDnaToInt(keyString);
-	} else {
-		// Key is number
-		for (int i = 0; i < keyString.size(); i++) {
-			// typecasts whoo
-			string keyIntTransitive = string(keyString[i]);
+
+	//reading the key into an int
+	for (int i = 0; i < keyString.size(); i++) {
+		if (keyString[0] == 'A' || keyString[0] == 'T' || keyString[0] == 'C' || keyString[0] == 'G') {
+			// Key is DNA
+			key[i] = convertDnaToInt(keyString[i]);
+		} else {
+			// Key is number
+			// typecasts whoo - wait actually not. custom methods whoo
+			string keyIntTransitive = convertCharToString(keyString[i]);
 			
 			key[i] = atoi(keyIntTransitive.c_str());
 		}
+		//make sure key[i] exists, mostly because I like using assertions
+		assert(key[i] != NULL);
 	}
 	
 	for (int i = 0; i < plaintextString.size(); i++) {
 		//set plaintext value i
 		plaintext[i] = convertLetterToNumber(plaintextString[i]);;
-		//make sure key[i] exists, mostly because I like using assertions
-		assert(key[i] != NULL);
 		//perform algorithm
-		plaintext[i] = plaintext[i] + key[i];
+		ciphertext[ciphertext.size()+1] = (convertNumberToLetter(plaintext[i] + key[i]));
 	}
 	
 	return ciphertext;
 }
 
-string decrypt(string ciphertext, string key) {
+string decrypt(string ciphertextString, string keyString) {
+	int key[keyString.size()];
+	int ciphertext[ciphertextString.size()];
 	string plaintext;
 	
+	//reading the key into an int
+	for (int i = 0; i < keyString.size(); i++) {
+		if (keyString[0] == 'A' || keyString[0] == 'T' || keyString[0] == 'C' || keyString[0] == 'G') {
+			// Key is DNA
+			char charKeyTransitive = keyString[i];
+			key[i] = convertDnaToInt(charKeyTransitive);
+		} else {
+			// Key is number
+			// typecasts whoo - wait actually not. custom methods whoo
+			string keyIntTransitive = convertCharToString(keyString[i]);
+			
+			key[i] = atoi(keyIntTransitive.c_str());
+		}
+		//make sure key[i] exists, mostly because I like using assertions
+		assert(key[i] != NULL);
+	}
 	
+	for (int i = 0; i < ciphertextString.size(); i++) {
+		//set ciphertext value i
+		ciphertext[i] = convertLetterToNumber(ciphertextString[i]);
+		//perform algorithm
+		plaintext[plaintext.size()+1] = (convertNumberToLetter(ciphertext[i] - key[i]));
+	}
 	
 	return plaintext;
 }
 
 int main() {
 	
+	// declare (mostly)
 	bool verbose = false;
 	bool willDumpData = true;
 	int iterations;
@@ -198,6 +419,7 @@ int main() {
 	string dumpLocation = "~/sciencefair.txt";
 	ofstream dumpfile;
 	
+	// ask 1
 	cout << "show verbose output? (y/n): ";
 	string charverbose;
 	cin >> charverbose;
@@ -207,6 +429,7 @@ int main() {
 		verbose = false;
 	}
 	
+	// ask 2
 	cout << "\n" << "dump data to file when done? (y/n) ";
 	string chardumpData;
 	cin >> chardumpData;
@@ -226,15 +449,20 @@ int main() {
 		willDumpData = false;
 	}
 	
+	// ask 3
 	cout << "select number of test iterations: ";
 	cin >> iterations;
 	
-	//initialize arrays to store the random numbers/sequences and ciphertexts that we generate: we can't do this at the top because we don't know how many numbers/sequences there will be
+	// declare (completely)
+	//initialize arrays to store the random numbers/sequences, ciphertexts that we generate, and number of times we tried decryption for each method: we can't do this at the top because we don't know how many test iterations there will be
+	int dnaDecryptionTries = 0;
+	int numDecryptionTries = 0;
 	int randnumber[iterations-1];
 	string randsequence[iterations-1];
 	string numciphertext[iterations-1];
 	string dnaciphertext[iterations-1];
 	
+	/*
 	cout << "\n" << "ok. select number of digits for the random numbers (no more than 9, please): ";
 	cin >> randnumberdigits;
 	assert(randnumberdigits < 10);
@@ -243,11 +471,22 @@ int main() {
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
 	cin >> dnanumbervalues;
 	if (willDumpData) dumpfile << "selected " << dnanumbervalues << " as the number of values in the DNA sequence";
+	*/
 	
-	cout << "\n" << "specify plaintext to encrypt: ";
+	// ask 4
+	cout << "\n" << "specify plaintext to encrypt (no more than 9 characters, please; plaintext will be converted to uppercase): ";
 	cin >> plaintext;
+	assert(plaintext.size() < 10);
+	if (verbose) cout << "\n" << "converting to uppercase";
+	plaintext = convertToUpperCase(plaintext);
+	if (verbose) cout << "\n" << "got " << plaintext;
 	if (willDumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
 	
+	cout << "\n" << "setting number of digits/values of numbers/DNA to " << plaintext.size() << ".";
+	randnumberdigits = plaintext.size();
+	dnanumbervalues = plaintext.size();
+	
+	// generate
 	cout << "\n" << "ok. generating random numbers";
 	/* // This clearly didn't work.
 	for (int i = 0; i != iterations; i++) {
@@ -435,10 +674,69 @@ int main() {
 	}
 	cout << "\n" << "done generating sequences";
 	
-	cout << "\n" << "encrypting plaintext using ";
-	//TODO
+	// encrypt
+	cout << "\n" << "encrypting plaintext using DNA";
+	for (int i = 0; i < iterations; i++) {
+		if (verbose) cout << "\n" << "generating ciphertext " << i+1;
+		dnaciphertext[i] = encrypt(plaintext, randsequence[i]);
+		if (verbose) cout << "\n" << "generated " << dnaciphertext[i] << " from key " << randsequence[i];
+	}
 	
-	//clean up and exit
+	cout << "\n" << "done encrypting using DNA. encrypting using random numbers";
+	
+	for (int i = 0; i < iterations; i++) {
+		if (verbose) cout << "\n" << "generating ciphertext " << i+1;
+		numciphertext[i] = encrypt(plaintext, convertIntToStr(randnumber[i]));
+		if (verbose) cout << "\n" << "generated " << numciphertext[i] << "from key " << randnumber[i];
+	}
+	
+	cout << "\n" << "done encrypting plaintext using random numbers";
+	
+	// test
+	cout << "\n" << "testing";
+	for (int i = 0; i < iterations; i++) {
+		string dnaTryKey = randsequence[i];
+		for (int j = 0; j < dnanumbervalues; j++) {
+			dnaTryKey.append("A");
+		}
+		
+		string numTryKey;
+		for (int j = 0; j < randnumberdigits; j++) {
+			numTryKey.append("0");
+		}
+		
+		if (verbose) cout << "\n" << "running test iteration " << i+1;
+		bool stillTestingDna = true;
+		bool stillTestingNum = true;
+		for (; stillTestingDna == true || stillTestingNum == true; ) {
+			string decryptedPlaintext;
+			
+			if (stillTestingDna) {
+				decryptedPlaintext = decrypt(dnaciphertext[i], dnaTryKey);
+				if (decryptedPlaintext == plaintext) {
+					stillTestingDna = false;
+				} else {
+					dnaTryKey = getNextSequence(dnaTryKey, dumpfile);
+				}
+				dnaDecryptionTries++;
+			}
+			
+			if (stillTestingNum == true) {
+				decryptedPlaintext = decrypt(numciphertext[i], numTryKey);
+				if (decryptedPlaintext == plaintext) {
+					stillTestingNum = false;
+				} else {
+					numTryKey = getNextSequence(numTryKey, dumpfile);
+				}
+			}
+		}
+		if (verbose) cout << "\n" << "done running test iteration " << i+1;
+	}
+	cout << "\n" << "done testing";
+	
+	// clean up
 	dumpfile.close();
+	
+	// exit
 	return 0;
 }
