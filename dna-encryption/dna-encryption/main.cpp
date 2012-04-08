@@ -5,6 +5,9 @@
 // Notes:
 // If plugging in an int to encrypt(), decrypt(), or getNextRandomNumber(), you MUST convert it to a string in the arguments!
 
+// Uncomment the following line to turn on dumpfiles. Note: this support was badly broken/inconsistent when I turned it off!
+//#define DUMPFILE_SUPPORT_ENABLED
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -28,13 +31,19 @@ string changeStringValue(string originalString, int stringValueToReplace, char r
 		}
 	}
 	
-	return newString;
+	return newstring;
 }
 */
 
+#ifdef DUMPFILE_SUPPORT_ENABLED
 string getNextRandNumber(string previousNumber, ofstream dumpfile) {
+#else
+string getNextRandNumber(string previousNumber) {
+#endif
 	//code complete
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	dumpfile << "\n" << "calculating next random number. previous random number was " << previousNumber;
+	#endif
 	string nextNumber = previousNumber;
 	bool stillChanging = true;
 	
@@ -77,9 +86,15 @@ string getNextRandNumber(string previousNumber, ofstream dumpfile) {
 	return nextNumber;
 }
 
+#ifdef DUMPFILE_SUPPORT_ENABLED
 string getNextSequence(string previousSequence, ofstream dumpfile) {
+#else
+string getNextSequence(string previousSequence) {
+#endif
 	//code complete
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	dumpfile << "\n" << "calculating next sequence. previous sequence was " << previousSequence;
+	#endif
 	string nextSequence = previousSequence;
 	bool stillChanging = true;
 	
@@ -100,7 +115,9 @@ string getNextSequence(string previousSequence, ofstream dumpfile) {
 		}
 	}
 	
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	dumpfile << "\n" << "new sequence is" << nextSequence;
+	#endif
 	return nextSequence;
 }
 
@@ -118,9 +135,12 @@ string convertToUpperCase(string& strToConvert) {
 	return strToConvert;
 }
 
-int convertDnaToInt(string sequence) {
+int convertDnaToInt(char sequenceChar) {
 	//code complete
 	int intSequence;
+	string sequence;
+	
+	sequence[0] = sequenceChar;
 	
 	for (int i = 0; i < sequence.size(); i++) {
 		int DnaNumberEquivalent;
@@ -417,7 +437,9 @@ int main() {
 	int dnanumbervalues;
 	string plaintext;
 	string dumpLocation = "~/sciencefair.txt";
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	ofstream dumpfile;
+	#endif
 	
 	// ask 1
 	cout << "show verbose output? (y/n): ";
@@ -429,6 +451,7 @@ int main() {
 		verbose = false;
 	}
 	
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	// ask 2
 	cout << "\n" << "dump data to file when done? (y/n) ";
 	string chardumpData;
@@ -448,15 +471,18 @@ int main() {
 	} else if (chardumpData == "n") {
 		willDumpData = false;
 	}
+	#else
+	cout << "\n" << "dumpfile support is disabled in this build.";
+	#endif
 	
 	// ask 3
-	cout << "select number of test iterations: ";
+	cout << "\n" << "select number of test iterations: ";
 	cin >> iterations;
 	
 	// declare (completely)
 	//initialize arrays to store the random numbers/sequences, ciphertexts that we generate, and number of times we tried decryption for each method: we can't do this at the top because we don't know how many test iterations there will be
-	int dnaDecryptionTries = 0;
-	int numDecryptionTries = 0;
+	int dnaDecryptionTries[iterations-1];
+	int numDecryptionTries[iterations-1];
 	int randnumber[iterations-1];
 	string randsequence[iterations-1];
 	string numciphertext[iterations-1];
@@ -466,11 +492,15 @@ int main() {
 	cout << "\n" << "ok. select number of digits for the random numbers (no more than 9, please): ";
 	cin >> randnumberdigits;
 	assert(randnumberdigits < 10);
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	if (willDumpData) dumpfile << "\n" << "selected " << randnumberdigits << " digits for random nubmers";
+	#endif
 	
 	cout << "\n" << "select number of values in the DNA sequence (A, T, C, and G will be converted from numbers 1-4 to perform encryption): ";
 	cin >> dnanumbervalues;
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	if (willDumpData) dumpfile << "selected " << dnanumbervalues << " as the number of values in the DNA sequence";
+	#endif
 	*/
 	
 	// ask 4
@@ -480,7 +510,9 @@ int main() {
 	if (verbose) cout << "\n" << "converting to uppercase";
 	plaintext = convertToUpperCase(plaintext);
 	if (verbose) cout << "\n" << "got " << plaintext;
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	if (willDumpData) dumpfile << "selected plaintext \"" << plaintext << "\"";
+	#endif
 	
 	cout << "\n" << "setting number of digits/values of numbers/DNA to " << plaintext.size() << ".";
 	randnumberdigits = plaintext.size();
@@ -551,17 +583,24 @@ int main() {
 		
 	}
 	*/
-	for (int i = 0; i != iterations; i++) {
+	for (int i = 0; i < iterations; i++) {
 		int trynumber;
 		if (verbose) {
 			cout << "\n" << "generating random number " << i+1;
 		}
 		bool numbervalid = false;
 		
-		//initialize random seed
-		srand ( time(NULL) );
-		//generate random number
-		trynumber = rand();
+		if (i = 0) {
+			//initialize random seed
+			srand ( time(NULL) );
+			//generate random number
+			trynumber = rand();
+		} else {
+			//new seed whee
+			srand ( randnumber[i-1] );
+			//new random number whee
+			trynumber = rand();
+		}
 
 		do {
 			if (verbose) {
@@ -601,15 +640,16 @@ int main() {
 			if (digits == randnumberdigits) {
 				numbervalid = true;
 			} else if (digits > randnumberdigits) {
-				trynumber -= trynumber % 10;
+			       
 			}
 			
 			if (verbose) {
 				if (numbervalid == true) {
-					cout << "\n" << "number of digits matches requested number of digits. generation of random number " << i+1 << "is complete";
+					cout << "\n" << "number of digits matched requested number of digits. generation of random number " << i+1 << "is complete";
 				}
 				if (numbervalid == false) {
 					cout << "\n" << "number of digits does not match requested number of digits. clipping numbers to get closer to a match";
+					trynumber = trynumber / 10;
 				}
 			}
 		} while (numbervalid == false);
@@ -716,9 +756,13 @@ int main() {
 				if (decryptedPlaintext == plaintext) {
 					stillTestingDna = false;
 				} else {
+					#ifdef DUMPFILE_SUPPORT_ENABLED
 					dnaTryKey = getNextSequence(dnaTryKey, dumpfile);
+					#else
+					dnaTryKey = getNextSequence(dnaTryKey);
+					#endif
 				}
-				dnaDecryptionTries++;
+				dnaDecryptionTries[i]++;
 			}
 			
 			if (stillTestingNum == true) {
@@ -726,16 +770,115 @@ int main() {
 				if (decryptedPlaintext == plaintext) {
 					stillTestingNum = false;
 				} else {
+					#ifdef DUMPFILE_SUPPORT_ENABLED
 					numTryKey = getNextSequence(numTryKey, dumpfile);
+					#else
+					numTryKey = getNextSequence(numTryKey);
+					#endif
 				}
+				numDecryptionTries[i]++;
 			}
 		}
 		if (verbose) cout << "\n" << "done running test iteration " << i+1;
 	}
 	cout << "\n" << "done testing";
 	
+	// summary
+	cout << "\n" << "\n" << "summary of results (best viewed with a fixed-width font):";
+	cout << "\n" << "test               ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-convertIntToStr(iterations).size())/2; i++) {
+			cout << " ";
+		}
+		cout << i+1;
+		for (int j = 0; j < (20-convertIntToStr(iterations).size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "plaintext          ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-plaintext.size())/2; i++) {
+			cout << " ";
+		}
+		cout << plaintext;
+		for (int j = 0; j < (20-plaintext.size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "dna sequence key   ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-randsequence[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << randsequence[i];
+		for (int j = 0; j < (20-randsequence[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "random number key  ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-convertIntToStr(randnumber[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << randnumber[i];
+		for (int j = 0; j < (20-convertIntToStr(randnumber[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "dna ciphertext     ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-dnaciphertext[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << dnaciphertext[i];
+		for (int j = 0; j < (20-dnaciphertext[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "number ciphertext  ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-numciphertext[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << numciphertext[i];
+		for (int j = 0; j < (20-numciphertext[i].size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "tries to break num ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-convertIntToStr(numDecryptionTries[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << numDecryptionTries[i];
+		for (int j = 0; j < (20-convertIntToStr(numDecryptionTries[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	cout << "\n" << "tries to break dna ||";
+	for (int i = 0; i < iterations-1; i++) {
+		for (int j = 0; j < (20-convertIntToStr(dnaDecryptionTries[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << dnaDecryptionTries[i];
+		for (int j = 0; j < (20-convertIntToStr(dnaDecryptionTries[i]).size())/2; i++) {
+			cout << " ";
+		}
+		cout << "|";
+	}
+	
+	
 	// clean up
+	#ifdef DUMPFILE_SUPPORT_ENABLED
 	dumpfile.close();
+	#endif
 	
 	// exit
 	return 0;
